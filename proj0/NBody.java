@@ -19,7 +19,7 @@ public class NBody {
 			double mass = in.readDouble();
 			String imgFileName = in.readString();
 
-			arrayOfBodies[i] = new Body(xxPos, yyPos, xxVel, yyVel, mass, "images/"+imgFileName);
+			arrayOfBodies[i] = new Body(xxPos, yyPos, xxVel, yyVel, mass, imgFileName);
 		}
 		return arrayOfBodies;
 	}

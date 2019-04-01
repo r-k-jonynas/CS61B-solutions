@@ -1,6 +1,6 @@
 public class Body {
 	/* Constants */
-	static final double GConst = 6.67e-11;
+	private static final double GConst = 6.67e-11;
 	/* Parameters */
 	/* Its current x position */
 	public double xxPos;
