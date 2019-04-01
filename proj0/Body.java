@@ -39,11 +39,11 @@ public class Body {
 	}
 	/** Helpers for calcDistance,
 		Calculate Dx and Dy, respectively */
-	public double calcDx(Body b) {
+	private double calcDx(Body b) {
 		return this.xxPos - b.xxPos;
 	}
 
-	public double calcDy(Body b) {
+	private double calcDy(Body b) {
 		return this.yyPos - b.yyPos;
 	}
 
