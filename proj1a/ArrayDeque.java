@@ -1,14 +1,14 @@
 public class ArrayDeque<T> {
-    private T[] items;
-    private int nextFirst;
-    private int nextLast;
+    public T[] items;
+    public int nextFirst;
+    public int nextLast;
     private int size;
 
     @SuppressWarnings("unchecked")
     public ArrayDeque() {
-        items = (T []) new Object[50];
-        nextFirst = 22;
-        nextLast = 23;
+        items = (T []) new Object[8];
+        nextFirst = 3;
+        nextLast = 4;
         size = 0;
     }
 
@@ -16,7 +16,7 @@ public class ArrayDeque<T> {
      entirely new ArrayDeque, with the exact same
      items as other. */
     @SuppressWarnings("unchecked")
-    public ArrayDeque(ArrayDeque other) {
+    public ArrayDeque(ArrayDeque<?> other) {
         items = (T []) new Object[other.items.length];
         System.arraycopy(other.items, 0, items, 0, size);
         nextFirst = other.nextFirst;
@@ -24,17 +24,78 @@ public class ArrayDeque<T> {
         size = other.size;
     }
 
+    @SuppressWarnings("unchecked")
+    public void resizeUp(int capacity) {
+        boolean wrappedAround = !((nextFirst == 0) | (nextFirst == items.length-1));
+        T[] temp = (T []) new Object[capacity];
+        if (wrappedAround == true) {
+            /* the front part starts at nextFirst+1 and ends at items.length -1 */
+            /* so it should be inserted from index capacity / 4 to index capacity / 4 + frontLength-1*/
+            int frontLength = items.length - nextFirst - 1;
+            System.arraycopy(items, nextFirst+1, temp, capacity/4, frontLength);
+            /* the back part starts at 0 and ends at nextLast -1 */
+            /* so it should be inserted at index after front part start index + front part length*/
+            System.arraycopy(items, 0, temp, capacity/4 + frontLength, nextLast);
+            nextFirst = capacity / 4 - 1;
+            nextLast = capacity / 4 * 3 - 1;
+        } else {
+            System.arraycopy(items, 0, temp, capacity/4, size);
+            /* FIX INDICES HERE */
+                if (nextFirst == items.length - 1) {
+                    nextFirst = capacity / 4 - 1;
+                    nextLast = capacity / 4 * 3 - 1;
+                } else if (nextFirst == 0) {
+                    nextFirst = capacity / 4;
+                    nextLast = capacity / 4 * 3;
+                }
+        }
+        items = temp;
+    }
+
+    // public void resizeDown(int capacity) {
+    //     if (nextFirst == nextLast) {
+
+    //     } else {
+    //         T[] temp = (T []) new Object[capacity];
+    //         System.arraycopy(items, 0, temp, 3, size);
+    //         items = temp;
+    //     }
+
+    // }
+
+
+
+    public boolean shouldResize() {
+        return size == (items.length - 1);
+    }
+
     /**  Adds an item of type T to the front of the deque.*/
     public void addFirst(T item) {
+        if (shouldResize() == true) {
+            resizeUp(2*items.length);
+        }
+
         items[nextFirst] = item;
-        nextFirst--;
+        if (nextFirst == 0) {
+            nextFirst = items.length-1;
+        } else {
+            nextFirst--;
+        }
         size++;
     }
 
     /**  Adds an item of type T to the back of the deque.*/
     public void addLast(T item) {
+        if (shouldResize() == true) {
+            resizeUp(2*items.length);
+        }
+
         items[nextLast] = item;
-        nextLast++;
+        if (nextLast + 1 == items.length) {
+            nextLast = 0;
+        } else {
+            nextLast++;
+        }
         size++;
     }
 
@@ -51,9 +112,20 @@ public class ArrayDeque<T> {
     /**  Prints the items in the deque from first to last, 
         separated by a space. Once all the items have been 
         printed, print out a new line.*/
+
+    /* NEED TO FIX */
     public void printDeque() {
-        for (int i = nextFirst + 1; i < nextLast; i++) {
-            System.out.print(items[i] + " ");
+        boolean wrappedAround = (nextFirst > nextLast) | (nextLast == nextFirst & (nextFirst==0 | nextFirst==items.length-1));
+        // boolean wrappedAround = ((nextFirst == 0) | (nextFirst == items.length-1));
+        if (wrappedAround == true) {
+            // int frontLength = items.length - nextFirst - 1;
+            for(int i = nextFirst + 1; i < items.length; i++) {
+                System.out.print(items[i] + " ");
+            }
+        } else {
+            for (int i = nextFirst + 1; i < nextLast; i++) {
+                System.out.print(items[i] + " ");
+            }
         }
         System.out.println();
     }
@@ -85,12 +157,41 @@ public class ArrayDeque<T> {
         return items[nextFirst + 1 + index];
     }
 
+    // public static void testWrapAround() {
+    //     ArrayDeque<Integer> test1 = new ArrayDeque<>();
+    //     // test1.printDeque();
+    //     test1.addFirst(1);
+    //     test1.addFirst(2);
+    //     test1.addLast(3);
+    //     test1.addLast(4);
+    //     test1.addLast(5);
+    //     // test1.printDeque();
+    //     test1.addLast(6);
+    //     // test1.printDeque();
+    //     test1.addLast(7);
+    //     // test1.printDeque();
+    //     test1.addLast(8);
+    // }
+
     public static void main(String[] args) {
-        ArrayDeque<String> test1 = new ArrayDeque<>();
+        ArrayDeque<Integer> test1 = new ArrayDeque<>();
+        // test1.printDeque();
+        test1.addFirst(1);
         test1.printDeque();
-        test1.addFirst("One");
-        test1.addFirst("Two");
-        test1.addLast("Three");
+        test1.addLast(2);
         test1.printDeque();
+        test1.addFirst(3);
+        test1.printDeque();
+        test1.addLast(4);
+        test1.printDeque();
+        test1.addFirst(5);
+        test1.printDeque();
+        test1.addLast(6);
+        test1.printDeque();
+        test1.addFirst(7);
+        test1.printDeque();
+        test1.addLast(8);
+        test1.printDeque();
+        System.out.println("Finished");
     }
 }
