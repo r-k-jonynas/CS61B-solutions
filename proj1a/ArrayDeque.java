@@ -24,50 +24,50 @@ public class ArrayDeque<T> {
         size = other.size;
     }
 
-    @SuppressWarnings("unchecked")
-    private void resizeUp(int capacity) {
-        boolean wrappedAround = !((nextFirst == 0) | (nextFirst == items.length - 1));
-        T[] temp = (T []) new Object[capacity];
-        if (wrappedAround == true) {
-            /* the front part starts at nextFirst+1 and ends at items.length -1 */
-            /* so it should be inserted from index capacity / 4 to index capacity / 4 + frontLength-1*/
-            int frontLength = items.length - nextFirst - 1;
-            System.arraycopy(items, nextFirst+1, temp, capacity/4, frontLength);
-            /* the back part starts at 0 and ends at nextLast -1 */
-            /* so it should be inserted at index after front part start index + front part length*/
-            System.arraycopy(items, 0, temp, capacity/4 + frontLength, nextLast);
-            nextFirst = capacity / 4 - 1;
-            nextLast = capacity / 4 * 3 - 1;
-        } else {
-            System.arraycopy(items, 0, temp, capacity/4, size);
-            /* FIX INDICES HERE */
-                if (nextFirst == items.length - 1) {
-                    nextFirst = capacity / 4 - 1;
-                    nextLast = capacity / 4 * 3 - 1;
-                } else if (nextFirst == 0) {
-                    nextFirst = capacity / 4;
-                    nextLast = capacity / 4 * 3;
-                }
-        }
-        items = temp;
+    // @SuppressWarnings("unchecked")
+    private void resizeUp() {
+        // boolean wrappedAround = !((nextFirst == 0) | (nextFirst == items.length - 1));
+        // T[] temp = (T []) new Object[capacity];
+        // if (wrappedAround == true) {
+        //     /* the front part starts at nextFirst+1 and ends at items.length -1 */
+        //     /* so it should be inserted from index capacity / 4 to index capacity / 4 + frontLength-1*/
+        //     int frontLength = items.length - nextFirst - 1;
+        //     System.arraycopy(items, nextFirst+1, temp, capacity/4, frontLength);
+        //     /* the back part starts at 0 and ends at nextLast -1 */
+        //     /* so it should be inserted at index after front part start index + front part length*/
+        //     System.arraycopy(items, 0, temp, capacity/4 + frontLength, nextLast);
+        //     nextFirst = capacity / 4 - 1;
+        //     nextLast = capacity / 4 * 3 - 1;
+        // } else {
+        //     System.arraycopy(items, 0, temp, capacity/4, size);
+        //     /* FIX INDICES HERE */
+        //         if (nextFirst == items.length - 1) {
+        //             nextFirst = capacity / 4 - 1;
+        //             nextLast = capacity / 4 * 3 - 1;
+        //         } else if (nextFirst == 0) {
+        //             nextFirst = capacity / 4;
+        //             nextLast = capacity / 4 * 3;
+        //         }
+        // }
+        // items = temp;
     }
 
-    // public void resizeDown(int capacity) {
-    //     if (nextFirst == nextLast) {
+    public void resizeDown() {
+        // if (nextFirst == nextLast) {
 
-    //     } else {
-    //         T[] temp = (T []) new Object[capacity];
-    //         System.arraycopy(items, 0, temp, 3, size);
-    //         items = temp;
-    //     }
+        // } else {
+        //     T[] temp = (T []) new Object[capacity];
+        //     System.arraycopy(items, 0, temp, 3, size);
+        //     items = temp;
+        // }
 
+    }
+
+
+
+    // private boolean shouldResize() {
+    //     return size == (items.length - 1);
     // }
-
-
-
-    private boolean shouldResize() {
-        return size == (items.length - 1);
-    }
 
     /**
      * Used to shift pointer when new items are added to the front of the DQ
@@ -115,32 +115,24 @@ public class ArrayDeque<T> {
 
     /**  Adds an item of type T to the front of the deque.*/
     public void addFirst(T item) {
-        if (shouldResize() == true) {
-            resizeUp(2*items.length);
-        }
-
-        items[nextFirst] = item;
-        if (nextFirst == 0) {
-            nextFirst = items.length-1;
+        if (this.size == this.items.length) {
+            resizeUp();
+            this.addFirst(item);
         } else {
-            nextFirst--;
+            this.items[nextFirst] = item;
+            upNextFirst();
         }
-        size++;
     }
 
     /**  Adds an item of type T to the back of the deque.*/
     public void addLast(T item) {
-        if (shouldResize() == true) {
-            resizeUp(2*items.length);
-        }
-
-        items[nextLast] = item;
-        if (nextLast + 1 == items.length) {
-            nextLast = 0;
+        if (this.size == this.items.length) {
+            resizeUp();
+            this.addLast(item);
         } else {
-            nextLast++;
+            this.items[nextLast] = item;
+            upNextLast();
         }
-        size++;
     }
 
     /**  Returns true if deque is empty, false otherwise.*/
