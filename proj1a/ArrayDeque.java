@@ -1,7 +1,7 @@
 public class ArrayDeque<T> {
-    public T[] items;
-    public int nextFirst;
-    public int nextLast;
+    private T[] items;
+    private int nextFirst;
+    private int nextLast;
     private int size;
 
     @SuppressWarnings("unchecked")
@@ -16,7 +16,7 @@ public class ArrayDeque<T> {
      entirely new ArrayDeque, with the exact same
      items as other. */
     @SuppressWarnings("unchecked")
-    public ArrayDeque(ArrayDeque<?> other) {
+    public ArrayDeque(ArrayDeque other) {
         items = (T []) new Object[other.items.length];
         System.arraycopy(other.items, 0, items, 0, size);
         nextFirst = other.nextFirst;
@@ -25,8 +25,8 @@ public class ArrayDeque<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public void resizeUp(int capacity) {
-        boolean wrappedAround = !((nextFirst == 0) | (nextFirst == items.length-1));
+    private void resizeUp(int capacity) {
+        boolean wrappedAround = !((nextFirst == 0) | (nextFirst == items.length - 1));
         T[] temp = (T []) new Object[capacity];
         if (wrappedAround == true) {
             /* the front part starts at nextFirst+1 and ends at items.length -1 */
@@ -65,8 +65,52 @@ public class ArrayDeque<T> {
 
 
 
-    public boolean shouldResize() {
+    private boolean shouldResize() {
         return size == (items.length - 1);
+    }
+
+    /**
+     * Used to shift pointer when new items are added to the front of the DQ
+     */
+    private void upNextFirst() {
+        if (this.nextFirst == 0) {
+            nextFirst = items.length;
+        } else {
+            nextFirst--;
+        }
+    }
+
+     /**
+     * Used to shift pointer when new items are rm-ed from the front of the DQ
+     */
+    private void downNextFirst() {
+        if (this.nextFirst == items.length-1) {
+            nextFirst = 0;
+        } else {
+            nextFirst++;
+        }
+    }
+
+     /**
+     * Used to shift pointer when new items are added to the back of the DQ
+     */
+    private void upNextLast() {
+        if (this.nextLast == items.length - 1) {
+            nextLast = 0;
+        } else {
+            nextLast++;
+        }
+    }
+
+     /**
+     * Used to shift pointer when new items are rm-ed from the back of the DQ
+     */
+    private void downNextLast() {
+        if (this.nextLast == 0) {
+            nextLast = items.length - 1;
+        } else {
+            nextLast--;
+        }
     }
 
     /**  Adds an item of type T to the front of the deque.*/
@@ -133,21 +177,33 @@ public class ArrayDeque<T> {
     /**  Removes and returns the item at the front of the deque. 
          If no such item exists, returns null.*/
     public T removeFirst() {
-        T temp = items[nextFirst+1];
-        items[nextFirst+1] = null;
-        nextFirst++;
-        size--;
-        return temp;
+        if (this.size - 1 < this.items.length / 4) {
+            resizeDown();
+            return this.removeFirst();
+        } else {
+            // TODO: test it!
+            downNextFirst();
+            T temp = items[nextFirst];
+            items[nextFirst] = null;
+            size--;
+            return temp;
+        }
     }
 
     /**  Removes and returns the item at the back of the deque. 
          If no such item exists, returns null.*/
     public T removeLast() {
-        T temp = items[nextLast-1];
-        items[nextLast-1] = null;
-        nextLast--;
-        size--;
-        return temp;
+        if (this.size - 1 < this.items.length / 4) {
+            resizeDown();
+            return this.removeLast();
+        } else {
+            // TODO: test it!
+            downNextLast();
+            T temp = items[nextLast];
+            items[nextLast] = null;
+            size--;
+            return temp;
+        }
     }
 
     /**  Gets the item at the given index, where 0 is the front, 
@@ -174,24 +230,24 @@ public class ArrayDeque<T> {
     // }
 
     public static void main(String[] args) {
-        ArrayDeque<Integer> test1 = new ArrayDeque<>();
+        // ArrayDeque<Integer> test1 = new ArrayDeque<>();
+        // // test1.printDeque();
+        // test1.addFirst(1);
         // test1.printDeque();
-        test1.addFirst(1);
-        test1.printDeque();
-        test1.addLast(2);
-        test1.printDeque();
-        test1.addFirst(3);
-        test1.printDeque();
-        test1.addLast(4);
-        test1.printDeque();
-        test1.addFirst(5);
-        test1.printDeque();
-        test1.addLast(6);
-        test1.printDeque();
-        test1.addFirst(7);
-        test1.printDeque();
-        test1.addLast(8);
-        test1.printDeque();
-        System.out.println("Finished");
+        // test1.addLast(2);
+        // test1.printDeque();
+        // test1.addFirst(3);
+        // test1.printDeque();
+        // test1.addLast(4);
+        // test1.printDeque();
+        // test1.addFirst(5);
+        // test1.printDeque();
+        // test1.addLast(6);
+        // test1.printDeque();
+        // test1.addFirst(7);
+        // test1.printDeque();
+        // test1.addLast(8);
+        // test1.printDeque();
+        // System.out.println("Finished");
     }
 }
