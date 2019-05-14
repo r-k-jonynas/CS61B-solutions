@@ -19,6 +19,7 @@ public class ArrayDequeTest {
 		return true;
 	}
 
+	/* Utility method for printing out nextFirst checks. */
 	public static boolean checkNextFirst(int expected, int actual) {
 		if (expected != actual) {
 			System.out.println("nextFirst returned " + actual + ", but expected: " + expected);
@@ -26,7 +27,7 @@ public class ArrayDequeTest {
 		}
 		return true;
 	}
-
+	/* Utility method for printing out nextLast checks. */
 	public static boolean checkNextLast(int expected, int actual) {
 		if (expected != actual) {
 			System.out.println("nextLast returned " + actual + ", but expected: " + expected);
@@ -35,14 +36,15 @@ public class ArrayDequeTest {
 		return true;
 	}
 
-	public static boolean checkShouldResize(boolean expected, boolean actual) {
-		if (expected != actual) {
-			System.out.println("shouldResize() returned " + actual + ", but expected: " + expected);
-			return false;
-		}
-		return true;
-	}
-
+	// /* Utility method for printing out get checks. */
+	// public static boolean checkGet(T expected, T actual) {
+	// 	if (expected != actual) {
+	// 		System.out.println("get returned " + actual + ", but expected: " + expected);
+	// 		return false;
+	// 	}
+	// 	return true;
+	// }
+	
 
 	/* Prints a nice message based on whether a test passed. 
 	 * The \n means newline. */
@@ -54,10 +56,9 @@ public class ArrayDequeTest {
 		}
 	}
 
-	/** Adds a few things to the list, checking isEmpty() and size() are correct, 
-	  * finally printing the results. 
-	  *
-	  * && is the "and" operation. */
+	/** Adds a few things to the list, checks isEmpty() and size() are correct, 
+	  * finally prints the results.
+	  */
 	public static void addIsEmptySizeTest() {
 		System.out.println("Running add/isEmpty/Size test.");
 		ArrayDeque<String> lld1 = new ArrayDeque<String>();
@@ -103,7 +104,7 @@ public class ArrayDequeTest {
 		printTestStatus(passed);
 	}
 
-	public static void LastFirstPointersTest() {
+	public static void lastFirstPointersTest() {
 
 		System.out.println("Running LastFirstPointersT test.");
 
@@ -130,7 +131,36 @@ public class ArrayDequeTest {
 		printTestStatus(passed);
 	}
 
-	public static void WrapAroundFromBackTest() {
+	// public static void getTest() {
+
+	// 	System.out.println("Running getTest test.");
+
+	// 	ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+	// 	boolean passed = true;
+
+	// 	lld1.addFirst(10);
+	// 	passed = checkGet(10, lld1.get(0)) && passed;
+	// 	passed = checkGet(null, lld1.get(1)) && passed;
+	// 	passed = checkGet(null, lld1.get(-1)) && passed;
+		
+	// 	lld1.addLast(13);
+	// 	passed = checkGet(10, lld1.get(0)) && passed;
+	// 	passed = checkGet(13, lld1.get(1)) && passed;
+	// 	passed = checkGet(null, lld1.get(-1)) && passed;
+		
+	// 	lld1.addLast(14);
+	// 	passed = checkGet(10, lld1.get(0)) && passed;
+	// 	passed = checkGet(13, lld1.get(1)) && passed;
+	// 	passed = checkGet(14, lld1.get(2)) && passed;
+	// 	passed = checkGet(null, lld1.get(3)) && passed;
+	// 	passed = checkGet(null, lld1.get(-1)) && passed;
+
+
+	// 	printTestStatus(passed);
+	// }
+	
+
+	public static void wrapAroundFromBackTest() {
 
 		System.out.println("Running WrapAroundFromBack test.");
 
@@ -161,7 +191,7 @@ public class ArrayDequeTest {
 		printTestStatus(passed);
 	}
 
-	public static void WrapAroundFromFrontTest() {
+	public static void wrapAroundFromFrontTest() {
 
 		System.out.println("Running WrapAroundFromFront test.");
 
@@ -192,26 +222,26 @@ public class ArrayDequeTest {
 		printTestStatus(passed);
 	}
 
-	public static void shouldResizeTest() {
+	// public static void shouldResizeTest() {
 
-		System.out.println("Running shouldResize test.");
+	// 	System.out.println("Running shouldResize test.");
 
-		ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
-		boolean passed = true;
+	// 	ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+	// 	boolean passed = true;
 
-		lld1.addFirst(10);
-		lld1.addLast(13);
-		passed = checkShouldResize(false, lld1.shouldResize()) && passed;
-		lld1.addFirst(14);
-		lld1.addFirst(15);
-		lld1.addFirst(16);
-		lld1.addFirst(17);
-		passed = checkShouldResize(false, lld1.shouldResize()) && passed;
-		lld1.addFirst(18);
-		passed = checkShouldResize(true, lld1.shouldResize()) && passed;
+	// 	lld1.addFirst(10);
+	// 	lld1.addLast(13);
+	// 	passed = checkShouldResize(false, lld1.shouldResize()) && passed;
+	// 	lld1.addFirst(14);
+	// 	lld1.addFirst(15);
+	// 	lld1.addFirst(16);
+	// 	lld1.addFirst(17);
+	// 	passed = checkShouldResize(false, lld1.shouldResize()) && passed;
+	// 	lld1.addFirst(18);
+	// 	passed = checkShouldResize(true, lld1.shouldResize()) && passed;
 
-		printTestStatus(passed);
-	}
+	// 	printTestStatus(passed);
+	// }
 
 	public static void resizeUpTest() {
 		System.out.println("Running ResizeUp test.");
@@ -257,10 +287,11 @@ public class ArrayDequeTest {
 		System.out.println("Running tests.\n");
 		addIsEmptySizeTest();
 		addRemoveTest();
-		LastFirstPointersTest();
-		WrapAroundFromBackTest();
-		WrapAroundFromFrontTest();
-		shouldResizeTest();
-		resizeUpTest();
+		lastFirstPointersTest();
+		// getTest();
+		// wrapAroundFromBackTest();
+		// wrapAroundFromFrontTest();
+		// shouldResizeTest();
+		// resizeUpTest();
 	}
 } 
