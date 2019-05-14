@@ -30,11 +30,13 @@ public class ArrayDeque<T> {
         // T[] temp = (T []) new Object[capacity];
         // if (wrappedAround == true) {
         //     /* the front part starts at nextFirst+1 and ends at items.length -1 */
-        //     /* so it should be inserted from index capacity / 4 to index capacity / 4 + frontLength-1*/
+        //     /* so it should be inserted from 
+        //     /* index capacity / 4 to index capacity / 4 + frontLength-1*/
         //     int frontLength = items.length - nextFirst - 1;
         //     System.arraycopy(items, nextFirst+1, temp, capacity/4, frontLength);
         //     /* the back part starts at 0 and ends at nextLast -1 */
-        //     /* so it should be inserted at index after front part start index + front part length*/
+        //     /* so it should be inserted at index after 
+        //     /* front part start index + front part length*/
         //     System.arraycopy(items, 0, temp, capacity/4 + frontLength, nextLast);
         //     nextFirst = capacity / 4 - 1;
         //     nextLast = capacity / 4 * 3 - 1;
@@ -52,7 +54,7 @@ public class ArrayDeque<T> {
         // items = temp;
     }
 
-    public void resizeDown() {
+    private void resizeDown() {
         // if (nextFirst == nextLast) {
 
         // } else {
@@ -84,7 +86,7 @@ public class ArrayDeque<T> {
      * Used to shift pointer when new items are rm-ed from the front of the DQ
      */
     private void downNextFirst() {
-        if (this.nextFirst == items.length-1) {
+        if (this.nextFirst == items.length - 1) {
             nextFirst = 0;
         } else {
             nextFirst++;
@@ -151,11 +153,11 @@ public class ArrayDeque<T> {
 
     /* NEED TO FIX */
     public void printDeque() {
-        boolean wrappedAround = (nextFirst > nextLast) | (nextLast == nextFirst & (nextFirst==0 | nextFirst==items.length-1));
+        boolean wrappedAround = (nextFirst > nextLast) | (nextLast == nextFirst & (nextFirst==0 | nextFirst == items.length - 1));
         // boolean wrappedAround = ((nextFirst == 0) | (nextFirst == items.length-1));
-        if (wrappedAround == true) {
+        if (wrappedAround) {
             // int frontLength = items.length - nextFirst - 1;
-            for(int i = nextFirst + 1; i < items.length; i++) {
+            for (int i = nextFirst + 1; i < items.length; i++) {
                 System.out.print(items[i] + " ");
             }
         } else {
@@ -202,7 +204,15 @@ public class ArrayDeque<T> {
         1 is the next item, and so forth. If no such item exists, 
         returns null. Must not alter the deque!*/
     public T get(int index) {
-        return items[nextFirst + 1 + index];
+        // TODO: Fix this. Same reasoning error as removeLast.
+        if (index < 0 || index >= items.length) {
+            return 0;
+        } else if (nextFirst > nextLast) {
+            int pos = nextLast - (size - index);
+            return items[pos];
+        } else {
+            return items[nextFirst + 1 + index];
+        }
     }
 
     // public static void testWrapAround() {
@@ -221,7 +231,7 @@ public class ArrayDeque<T> {
     //     test1.addLast(8);
     // }
 
-    public static void main(String[] args) {
+    // public static void main(String[] args) {
         // ArrayDeque<Integer> test1 = new ArrayDeque<>();
         // // test1.printDeque();
         // test1.addFirst(1);
