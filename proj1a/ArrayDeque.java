@@ -1,9 +1,9 @@
 public class ArrayDeque<T> {
     // TODO: Make private before committing
-    public T[] items;
-    public int nextFirst;
-    public int nextLast;
-    public int size;
+    private T[] items;
+    private int nextFirst;
+    private int nextLast;
+    private int size;
 
     @SuppressWarnings("unchecked")
     public ArrayDeque() {
@@ -25,7 +25,6 @@ public class ArrayDeque<T> {
         size = other.size;
     }
 
-    // @SuppressWarnings("unchecked")
     private void resizeUp() {
         // boolean wrappedAround = !((nextFirst == 0) | (nextFirst == items.length - 1));
         // T[] temp = (T []) new Object[capacity];
@@ -66,56 +65,6 @@ public class ArrayDeque<T> {
 
     }
 
-
-
-    // private boolean shouldResize() {
-    //     return size == (items.length - 1);
-    // }
-
-    /**
-     * Used to shift pointer when new items are added to the front of the DQ
-     */
-    private void upNextFirst() {
-        if (this.nextFirst == 0) {
-            nextFirst = items.length;
-        } else {
-            nextFirst--;
-        }
-    }
-
-     /**
-     * Used to shift pointer when new items are rm-ed from the front of the DQ
-     */
-    private void downNextFirst() {
-        if (this.nextFirst == items.length - 1) {
-            nextFirst = 0;
-        } else {
-            nextFirst++;
-        }
-    }
-
-     /**
-     * Used to shift pointer when new items are added to the back of the DQ
-     */
-    private void upNextLast() {
-        if (this.nextLast == items.length - 1) {
-            nextLast = 0;
-        } else {
-            nextLast++;
-        }
-    }
-
-     /**
-     * Used to shift pointer when new items are rm-ed from the back of the DQ
-     */
-    private void downNextLast() {
-        if (this.nextLast == 0) {
-            nextLast = items.length - 1;
-        } else {
-            nextLast--;
-        }
-    }
-
     /**  Adds an item of type T to the front of the deque.*/
     public void addFirst(T item) {
         if (this.size == this.items.length) {
@@ -123,7 +72,7 @@ public class ArrayDeque<T> {
             this.addFirst(item);
         } else {
             this.items[nextFirst] = item;
-            upNextFirst();
+            nextFirst = (nextFirst - 1) % items.length;
             size++;
         }
     }
@@ -135,7 +84,7 @@ public class ArrayDeque<T> {
             this.addLast(item);
         } else {
             this.items[nextLast] = item;
-            upNextLast();
+            nextLast = (nextLast + 1) % items.length;
             size++;
         }
     }
@@ -153,20 +102,13 @@ public class ArrayDeque<T> {
     /**  Prints the items in the deque from first to last, 
         separated by a space. Once all the items have been 
         printed, print out a new line.*/
-
-    /* NEED TO FIX */
     public void printDeque() {
-        boolean wrappedAround = (nextFirst > nextLast) | (nextLast == nextFirst & (nextFirst==0 | nextFirst == items.length - 1));
-        // boolean wrappedAround = ((nextFirst == 0) | (nextFirst == items.length-1));
-        if (wrappedAround) {
-            // int frontLength = items.length - nextFirst - 1;
-            for (int i = nextFirst + 1; i < items.length; i++) {
-                System.out.print(items[i] + " ");
-            }
-        } else {
-            for (int i = nextFirst + 1; i < nextLast; i++) {
-                System.out.print(items[i] + " ");
-            }
+        int counter = size;
+        int i = nextFirst;
+        while (counter > 0) {
+            i = (i+1) % items.length;
+            System.out.print(items[i] + " ");
+            counter--;
         }
         System.out.println();
     }
@@ -178,8 +120,7 @@ public class ArrayDeque<T> {
             resizeDown();
             return this.removeFirst();
         } else {
-            // TODO: test it!
-            downNextFirst();
+            nextFirst = (nextFirst + 1) % items.length;
             T temp = items[nextFirst];
             items[nextFirst] = null;
             size--;
@@ -189,70 +130,46 @@ public class ArrayDeque<T> {
 
     /**  Removes and returns the item at the back of the deque. 
          If no such item exists, returns null.*/
-    public T removeLast() {
-        if (size - 1 < items.length / 4 && items.length > 15) {
-            resizeDown();
-            return this.removeLast();
-        } else {
-            // TODO: test it!
-            downNextLast();
-            T temp = items[nextLast];
-            items[nextLast] = null;
-            size--;
-            return temp;
+         public T removeLast() {
+            if (this.size - 1 < this.items.length / 4 && items.length > 15) {
+                resizeDown();
+                return this.removeLast();
+            } else {
+                nextLast = (nextLast - 1) % items.length;
+                T temp = items[nextLast];
+                items[nextLast] = null;
+                size--;
+                return temp;
+            }
         }
-    }
 
     /**  Gets the item at the given index, where 0 is the front, 
         1 is the next item, and so forth. If no such item exists, 
         returns null. Must not alter the deque!*/
     public T get(int index) {
-        // TODO: CHECK IF CORRECT. Same reasoning error as removeLast.
         if (index < 0 || index >= items.length) {
             return null;
-        } else if (nextFirst > nextLast) {
-            int pos = nextLast - (size - index);
-            return items[pos];
-        } else {
-            return items[nextFirst + 1 + index];
         }
+        int counter = index;
+        int i = nextFirst+1;
+        while (counter > 0) {
+            i = (i+1) % items.length;
+            counter--; 
+        }
+        return items[i];
     }
 
-    // public static void testWrapAround() {
+    // public static void main(String[] args) {
     //     ArrayDeque<Integer> test1 = new ArrayDeque<>();
-    //     // test1.printDeque();
-    //     test1.addFirst(1);
-    //     test1.addFirst(2);
+    //     test1.addLast(1);
+    //     test1.addLast(2);
     //     test1.addLast(3);
     //     test1.addLast(4);
     //     test1.addLast(5);
-    //     // test1.printDeque();
     //     test1.addLast(6);
-    //     // test1.printDeque();
     //     test1.addLast(7);
-    //     // test1.printDeque();
     //     test1.addLast(8);
-    // }
-
-    // public static void main(String[] args) {
-        // ArrayDeque<Integer> test1 = new ArrayDeque<>();
-        // // test1.printDeque();
-        // test1.addFirst(1);
-        // test1.printDeque();
-        // test1.addLast(2);
-        // test1.printDeque();
-        // test1.addFirst(3);
-        // test1.printDeque();
-        // test1.addLast(4);
-        // test1.printDeque();
-        // test1.addFirst(5);
-        // test1.printDeque();
-        // test1.addLast(6);
-        // test1.printDeque();
-        // test1.addFirst(7);
-        // test1.printDeque();
-        // test1.addLast(8);
-        // test1.printDeque();
-        // System.out.println("Finished");
+    //     test1.printDeque();
+    //     System.out.println("Finished");
     // }
 }

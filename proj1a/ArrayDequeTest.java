@@ -36,14 +36,14 @@ public class ArrayDequeTest {
 		return true;
 	}
 
-	// /* Utility method for printing out get checks. */
-	// public static boolean checkGet(T expected, T actual) {
-	// 	if (expected != actual) {
-	// 		System.out.println("get returned " + actual + ", but expected: " + expected);
-	// 		return false;
-	// 	}
-	// 	return true;
-	// }
+	/* Utility method for printing out get checks. */
+	public static boolean checkGet(Object expected, Object actual) {
+		if (expected != actual) {
+			System.out.println("get returned " + actual + ", but expected: " + expected);
+			return false;
+		}
+		return true;
+	}
 	
 
 	/* Prints a nice message based on whether a test passed. 
@@ -131,34 +131,91 @@ public class ArrayDequeTest {
 		printTestStatus(passed);
 	}
 
-	// public static void getTest() {
+	public static void getTest1() {
 
-	// 	System.out.println("Running getTest test.");
+		System.out.println("Running getTest test No.1.");
 
-	// 	ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
-	// 	boolean passed = true;
+		ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+		boolean passed = true;
 
-	// 	lld1.addFirst(10);
-	// 	passed = checkGet(10, lld1.get(0)) && passed;
-	// 	passed = checkGet(null, lld1.get(1)) && passed;
-	// 	passed = checkGet(null, lld1.get(-1)) && passed;
+		lld1.addFirst(10);
+		passed = checkGet(10, lld1.get(0)) && passed;
+		passed = checkGet(null, lld1.get(1)) && passed;
+		passed = checkGet(null, lld1.get(-1)) && passed;
 		
-	// 	lld1.addLast(13);
-	// 	passed = checkGet(10, lld1.get(0)) && passed;
-	// 	passed = checkGet(13, lld1.get(1)) && passed;
-	// 	passed = checkGet(null, lld1.get(-1)) && passed;
+		lld1.addLast(13);
+		passed = checkGet(10, lld1.get(0)) && passed;
+		passed = checkGet(13, lld1.get(1)) && passed;
+		passed = checkGet(null, lld1.get(-1)) && passed;
 		
-	// 	lld1.addLast(14);
-	// 	passed = checkGet(10, lld1.get(0)) && passed;
-	// 	passed = checkGet(13, lld1.get(1)) && passed;
-	// 	passed = checkGet(14, lld1.get(2)) && passed;
-	// 	passed = checkGet(null, lld1.get(3)) && passed;
-	// 	passed = checkGet(null, lld1.get(-1)) && passed;
+		lld1.addLast(14);
+		passed = checkGet(10, lld1.get(0)) && passed;
+		passed = checkGet(13, lld1.get(1)) && passed;
+		passed = checkGet(14, lld1.get(2)) && passed;
+		passed = checkGet(null, lld1.get(3)) && passed;
+		passed = checkGet(null, lld1.get(-1)) && passed;
 
 
-	// 	printTestStatus(passed);
-	// }
+		printTestStatus(passed);
+	}
+
+	public static void getTest2() {
+
+		System.out.println("Running getTest test No.2.");
+
+		ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+		boolean passed = true;
+
+		lld1.addLast(10);
+		passed = checkGet(10, lld1.get(0)) && passed;
+		passed = checkGet(null, lld1.get(1)) && passed;
+		passed = checkGet(null, lld1.get(-1)) && passed;
+		
+		lld1.addLast(13);
+		passed = checkGet(10, lld1.get(0)) && passed;
+		passed = checkGet(13, lld1.get(1)) && passed;
+		passed = checkGet(null, lld1.get(-1)) && passed;
+		
+		lld1.addLast(14);
+		passed = checkGet(10, lld1.get(0)) && passed;
+		passed = checkGet(13, lld1.get(1)) && passed;
+		passed = checkGet(14, lld1.get(2)) && passed;
+		passed = checkGet(null, lld1.get(3)) && passed;
+		passed = checkGet(null, lld1.get(-1)) && passed;
+
+
+		printTestStatus(passed);
+	}
 	
+
+	public static void getTest3() {
+
+		System.out.println("Running getTest test No.3.");
+
+		ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+		boolean passed = true;
+
+		lld1.addLast(10);		
+		lld1.addLast(13);
+		lld1.addLast(14);
+		lld1.addLast(15);
+		lld1.addLast(16);
+		lld1.addLast(17);
+		lld1.addLast(18);
+		passed = checkGet(10, lld1.get(0)) && passed;
+		passed = checkGet(13, lld1.get(1)) && passed;
+		passed = checkGet(14, lld1.get(2)) && passed;
+		passed = checkGet(15, lld1.get(3)) && passed;
+		passed = checkGet(null, lld1.get(-1)) && passed;
+		
+		// THIS LINE FAILS: returns IndexOutOfBoundsException
+		passed = checkGet(16, lld1.get(4)) && passed;
+		passed = checkGet(17, lld1.get(5)) && passed;
+		passed = checkGet(18, lld1.get(6)) && passed;
+		passed = checkGet(null, lld1.get(7)) && passed;
+
+		printTestStatus(passed);
+	}
 
 	public static void wrapAroundFromBackTest() {
 
@@ -288,7 +345,9 @@ public class ArrayDequeTest {
 		addIsEmptySizeTest();
 		addRemoveTest();
 		lastFirstPointersTest();
-		// getTest();
+		getTest1();
+		getTest2();
+		getTest3();
 		// wrapAroundFromBackTest();
 		// wrapAroundFromFrontTest();
 		// shouldResizeTest();
