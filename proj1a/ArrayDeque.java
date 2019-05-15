@@ -18,7 +18,7 @@ public class ArrayDeque<T> {
     @SuppressWarnings("unchecked")
     public ArrayDeque(ArrayDeque other) {
         items = (T []) new Object[other.items.length];
-        System.arraycopy(other.items, 0, items, 0, size);
+        System.arraycopy(other.items, 0, items, 0, other.items.length);
         nextFirst = other.nextFirst;
         nextLast = other.nextLast;
         size = other.size;
@@ -69,7 +69,7 @@ public class ArrayDeque<T> {
         T[] temp = (T []) new Object[newCapacity];
 
         /* Check if not wrapped around */
-        if (posLastElement > posFirstElement){
+        if (posLastElement > posFirstElement) {
             int numOfElIn1stCopy = size;
             System.arraycopy(items, posFirstElement, temp, newCapacity / 4, numOfElIn1stCopy);
         } else {
@@ -136,7 +136,7 @@ public class ArrayDeque<T> {
         int counter = size;
         int i = nextFirst;
         while (counter > 0) {
-            i = (i+1) % items.length;
+            i = (i + 1) % items.length;
             System.out.print(items[i] + " ");
             counter--;
         }
@@ -146,7 +146,9 @@ public class ArrayDeque<T> {
     /**  Removes and returns the item at the front of the deque. 
          If no such item exists, returns null.*/
     public T removeFirst() {
-        if (this.size - 1 < this.items.length / 4 && items.length > 15) {
+        if (this.size == 0) {
+            return null;
+        } else if (this.size - 1 < this.items.length / 4 && items.length > 15) {
             resizeDown();
             return this.removeFirst();
         } else {
@@ -166,7 +168,9 @@ public class ArrayDeque<T> {
     /**  Removes and returns the item at the back of the deque. 
          If no such item exists, returns null.*/
     public T removeLast() {
-        if (this.size - 1 < this.items.length / 4 && items.length > 15) {
+        if (this.size == 0) {
+            return null;
+        } else if (this.size - 1 < this.items.length / 4 && items.length > 15) {
             resizeDown();
             return this.removeLast();
         } else {
@@ -191,12 +195,12 @@ public class ArrayDeque<T> {
             return null;
         }
         int counter = index;
-        int i = nextFirst+1;
+        int i = nextFirst + 1;
         while (counter > 0) {
             if ((i + 1) % items.length >= 0) {
-                i = (i+1) % items.length;
+                i = (i + 1) % items.length;
             } else {
-                i = (i+1) % items.length + items.length;
+                i = (i + 1) % items.length + items.length;
             }
             counter--; 
         }
