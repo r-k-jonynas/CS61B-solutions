@@ -1,5 +1,4 @@
 public class ArrayDeque<T> {
-    // Make private before committing
     private T[] items;
     private int nextFirst;
     private int nextLast;
@@ -37,11 +36,9 @@ public class ArrayDeque<T> {
        
         int numOfElIn1stCopy = items.length - posFirstElement;
         int numOfElIn2ndCopy = items.length - numOfElIn1stCopy;
-        // int posLastElement = (nextLast - 1) % items.length;
         
         T[] temp = (T []) new Object[newCapacity];
         
-        /* srcArr, srcArrStartPos, destArr, destStartPos, numOfElToCopy */ 
         System.arraycopy(items, posFirstElement, temp, newCapacity / 4, numOfElIn1stCopy);
         System.arraycopy(items, 0, temp, newCapacity / 4 + numOfElIn1stCopy, numOfElIn2ndCopy);
         
@@ -50,7 +47,42 @@ public class ArrayDeque<T> {
         nextLast = newCapacity / 4 * 3;
     }
 
+    @SuppressWarnings("unchecked")
     private void resizeDown() {
+        int newCapacity = items.length / 2;
+        int posFirstElement;
+        int posLastElement;
+
+        /* Find out the position of 1st element */
+        if ((nextFirst + 1) % items.length >= 0) {
+            posFirstElement = (nextFirst + 1) % items.length;
+        } else {
+            posFirstElement = (nextFirst + 1) % items.length + items.length;
+        }
+        /* Find out the position of last element */
+        if ((nextLast - 1) % items.length >= 0) {
+            posLastElement = (nextLast - 1) % items.length;
+        } else {
+            posLastElement = (nextLast - 1) % items.length + items.length;
+        }
+
+        T[] temp = (T []) new Object[newCapacity];
+
+        /* Check if not wrapped around */
+        if (posLastElement > posFirstElement){
+            int numOfElIn1stCopy = size;
+            System.arraycopy(items, posFirstElement, temp, newCapacity / 4, numOfElIn1stCopy);
+        } else {
+            int numOfElIn1stCopy = items.length - posFirstElement;
+            int numOfElIn2ndCopy = size - numOfElIn1stCopy;
+
+            System.arraycopy(items, posFirstElement, temp, newCapacity / 4, numOfElIn1stCopy);
+            System.arraycopy(items, 0, temp, newCapacity / 4 + numOfElIn1stCopy, numOfElIn2ndCopy);
+        }
+
+        this.items = temp;
+        nextFirst = newCapacity / 4 - 1;
+        nextLast = newCapacity / 4 * 3;
     }
 
     /**  Adds an item of type T to the front of the deque.*/
@@ -66,8 +98,8 @@ public class ArrayDeque<T> {
             } else {
                 nextFirst = (nextFirst - 1) % items.length + items.length;
             }
+            size++;
         }
-        size++;
     }
 
     /**  Adds an item of type T to the back of the deque.*/
@@ -104,12 +136,7 @@ public class ArrayDeque<T> {
         int counter = size;
         int i = nextFirst;
         while (counter > 0) {
-            // % is remainder, not modulus in Java, thus, might need to fix
-            if ((i + 1) % items.length >= 0) {
-                i = (i+1) % items.length;
-            } else {
-                i = (i+1) % items.length + items.length;
-            }
+            i = (i+1) % items.length;
             System.out.print(items[i] + " ");
             counter--;
         }
@@ -166,7 +193,6 @@ public class ArrayDeque<T> {
         int counter = index;
         int i = nextFirst+1;
         while (counter > 0) {
-            // % is remainder, not modulus in Java, thus, might need to fix
             if ((i + 1) % items.length >= 0) {
                 i = (i+1) % items.length;
             } else {
@@ -176,18 +202,4 @@ public class ArrayDeque<T> {
         }
         return items[i];
     }
-
-    // public static void main(String[] args) {
-    //     ArrayDeque<Integer> test1 = new ArrayDeque<>();
-    //     test1.addLast(1);
-    //     test1.addLast(2);
-    //     test1.addLast(3);
-    //     test1.addLast(4);
-    //     test1.addLast(5);
-    //     test1.addLast(6);
-    //     test1.addLast(7);
-    //     test1.addLast(8);
-    //     test1.printDeque();
-    //     System.out.println("Finished");
-    // }
 }
