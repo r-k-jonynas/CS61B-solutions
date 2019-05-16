@@ -208,7 +208,6 @@ public class ArrayDequeTest {
 		passed = checkGet(15, lld1.get(3)) && passed;
 		passed = checkGet(null, lld1.get(-1)) && passed;
 		
-		// THIS LINE FAILS: returns IndexOutOfBoundsException
 		passed = checkGet(16, lld1.get(4)) && passed;
 		passed = checkGet(17, lld1.get(5)) && passed;
 		passed = checkGet(18, lld1.get(6)) && passed;
@@ -217,125 +216,43 @@ public class ArrayDequeTest {
 		printTestStatus(passed);
 	}
 
-	public static void wrapAroundFromBackTest() {
+	public static void getTestDeepCopy() {
 
-		System.out.println("Running WrapAroundFromBack test.");
+		System.out.println("Running getTestDeepCopy test.");
 
 		ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
 		boolean passed = true;
 
-		lld1.addFirst(10);
+		lld1.addLast(10);		
 		lld1.addLast(13);
 		lld1.addLast(14);
 		lld1.addLast(15);
 		lld1.addLast(16);
-
-		passed = checkNextFirst(2, lld1.nextFirst) && passed;
-		passed = checkNextLast(0, lld1.nextLast) && passed;
-
 		lld1.addLast(17);
-		passed = checkNextFirst(2, lld1.nextFirst) && passed;
-		passed = checkNextLast(1, lld1.nextLast) && passed;
-
 		lld1.addLast(18);
-		passed = checkNextFirst(2, lld1.nextFirst) && passed;
-		passed = checkNextLast(2, lld1.nextLast) && passed;
+		passed = checkGet(10, lld1.get(0)) && passed;
+		passed = checkGet(13, lld1.get(1)) && passed;
+		passed = checkGet(14, lld1.get(2)) && passed;
+		passed = checkGet(15, lld1.get(3)) && passed;
+		passed = checkGet(null, lld1.get(-1)) && passed;
+		
+		passed = checkGet(16, lld1.get(4)) && passed;
+		passed = checkGet(17, lld1.get(5)) && passed;
+		passed = checkGet(18, lld1.get(6)) && passed;
+		passed = checkGet(null, lld1.get(7)) && passed;
 
-		lld1.addLast(19);
-		passed = checkNextFirst(2, lld1.nextFirst) && passed;
-		passed = checkNextLast(3, lld1.nextLast) && passed;
+		ArrayDeque<Integer> lld2 = new ArrayDeque<Integer>(lld1);
 
-		printTestStatus(passed);
-	}
-
-	public static void wrapAroundFromFrontTest() {
-
-		System.out.println("Running WrapAroundFromFront test.");
-
-		ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
-		boolean passed = true;
-
-		lld1.addFirst(10);
-		lld1.addLast(13);
-		passed = checkNextFirst(2, lld1.nextFirst) && passed;
-		lld1.addFirst(14);
-		passed = checkNextFirst(1, lld1.nextFirst) && passed;
-		lld1.addFirst(15);
-		passed = checkNextFirst(0, lld1.nextFirst) && passed;
-		lld1.addFirst(16);
-		passed = checkNextFirst(7, lld1.nextFirst) && passed;
-
-
-		lld1.addFirst(17);
-		passed = checkNextFirst(6, lld1.nextFirst) && passed;
-
-		lld1.addFirst(18);
-		passed = checkNextFirst(5, lld1.nextFirst) && passed;
-
-		lld1.addFirst(19);
-		passed = checkNextFirst(4, lld1.nextFirst) && passed;
-		passed = checkNextLast(4, lld1.nextFirst) && passed;
-
-		printTestStatus(passed);
-	}
-
-	// public static void shouldResizeTest() {
-
-	// 	System.out.println("Running shouldResize test.");
-
-	// 	ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
-	// 	boolean passed = true;
-
-	// 	lld1.addFirst(10);
-	// 	lld1.addLast(13);
-	// 	passed = checkShouldResize(false, lld1.shouldResize()) && passed;
-	// 	lld1.addFirst(14);
-	// 	lld1.addFirst(15);
-	// 	lld1.addFirst(16);
-	// 	lld1.addFirst(17);
-	// 	passed = checkShouldResize(false, lld1.shouldResize()) && passed;
-	// 	lld1.addFirst(18);
-	// 	passed = checkShouldResize(true, lld1.shouldResize()) && passed;
-
-	// 	printTestStatus(passed);
-	// }
-
-	public static void resizeUpTest() {
-		System.out.println("Running ResizeUp test.");
-
-		ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
-		boolean passed = true;
-
-		lld1.addFirst(10);
-		System.out.println("-------");
-		lld1.printDeque();
-		lld1.addLast(13);
-		System.out.println("-------");
-		lld1.printDeque();
-		lld1.addFirst(14);
-		System.out.println("-------");
-		lld1.printDeque();
-		lld1.addFirst(15);
-		System.out.println("-------");
-		lld1.printDeque();
-		lld1.addFirst(16);
-		System.out.println("-------");
-		lld1.printDeque();
-		lld1.addFirst(17);
-		System.out.println("-------");
-		lld1.printDeque();
-		lld1.addFirst(18);
-
-		// Integer[] expected = {18, 17, 16, 15, 14, 13, 10, 13};
-		// boolean passed1 = expected == lld1.items;
-
-		// printTestStatus(passed1 & passed);
-		System.out.println("-------");
-		lld1.printDeque();
-		lld1.addFirst(19);
-
-		// Integer[] expected = {18, 17, 16, 15, 14, 13, 10, 13};
-		// boolean passed1 = expected == lld1.items;
+		passed = checkGet(10, lld2.get(0)) && passed;
+		passed = checkGet(13, lld2.get(1)) && passed;
+		passed = checkGet(14, lld2.get(2)) && passed;
+		passed = checkGet(15, lld2.get(3)) && passed;
+		passed = checkGet(null, lld2.get(-1)) && passed;
+		
+		passed = checkGet(16, lld2.get(4)) && passed;
+		passed = checkGet(17, lld2.get(5)) && passed;
+		passed = checkGet(18, lld2.get(6)) && passed;
+		passed = checkGet(null, lld2.get(7)) && passed;
 
 		printTestStatus(passed);
 	}
@@ -348,9 +265,6 @@ public class ArrayDequeTest {
 		getTest1();
 		getTest2();
 		getTest3();
-		// wrapAroundFromBackTest();
-		// wrapAroundFromFrontTest();
-		// shouldResizeTest();
-		// resizeUpTest();
+		getTestDeepCopy();
 	}
 } 

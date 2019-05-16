@@ -31,7 +31,7 @@ public class LinkedListDeque<T> {
     /** Creating a deep copy means that you create an
      entirely new LinkedListDeque, with the exact same
      items as other. */
-    public LinkedListDeque(LinkedListDeque other) {
+    public LinkedListDeque(LinkedListDeque<T> other) {
         GenericNode temp = other.sentFront;
         GenericNode tempForCopy = new GenericNode(temp.prev, temp.item, null);
         sentFront = tempForCopy;
