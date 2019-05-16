@@ -1,8 +1,8 @@
 public class ArrayDeque<T> {
-    public T[] items;
-    public int nextFirst;
-    public int nextLast;
-    public int size;
+    private T[] items;
+    private int nextFirst;
+    private int nextLast;
+    private int size;
 
     @SuppressWarnings("unchecked")
     public ArrayDeque() {
@@ -15,9 +15,8 @@ public class ArrayDeque<T> {
     /** Creating a deep copy means that you create an
      entirely new ArrayDeque, with the exact same
      items as other. */
-    /* TODO: DEEP COPY IN COMBINATION WITH GET */
     @SuppressWarnings("unchecked")
-    public ArrayDeque(ArrayDeque<T> other) {
+    public ArrayDeque(ArrayDeque other) {
         items = (T []) new Object[other.items.length];
         System.arraycopy(other.items, 0, items, 0, other.items.length);
         nextFirst = other.nextFirst;
@@ -93,7 +92,6 @@ public class ArrayDeque<T> {
             this.addFirst(item);
         } else {
             this.items[nextFirst] = item;
-            // % is remainder, not modulus in Java, thus, must fix
             if ((nextFirst - 1) % items.length >= 0) {
                 nextFirst = (nextFirst - 1) % items.length;
             } else {
@@ -110,7 +108,6 @@ public class ArrayDeque<T> {
             this.addLast(item);
         } else {
             this.items[nextLast] = item;
-            // % is remainder, not modulus in Java, thus, must fix
             if ((nextLast + 1) % items.length >= 0) {
                 nextLast = (nextLast + 1) % items.length;
             } else {
@@ -153,7 +150,6 @@ public class ArrayDeque<T> {
             resizeDown();
             return this.removeFirst();
         } else {
-            // % is remainder, not modulus in Java, thus, must fix
             if ((nextFirst + 1) % items.length >= 0) {
                 nextFirst = (nextFirst + 1) % items.length;
             } else {
@@ -175,7 +171,6 @@ public class ArrayDeque<T> {
             resizeDown();
             return this.removeLast();
         } else {
-            // % is remainder, not modulus in Java, thus, must fix
             if ((nextLast - 1) % items.length >= 0) {
                 nextLast = (nextLast - 1) % items.length;
             } else {
@@ -191,21 +186,10 @@ public class ArrayDeque<T> {
     /**  Gets the item at the given index, where 0 is the front, 
         1 is the next item, and so forth. If no such item exists, 
         returns null. Must not alter the deque!*/
-    /* TODO: FIX GET AND GET IN COMBINATION WITH DEEP COPY */
     public T get(int index) {
         if (index < 0 || index >= items.length) {
             return null;
         }
-        // int counter = index;
-        // int i = nextFirst + 1;
-        // while (counter > 0) {
-        //     if ((i + 1) % items.length >= 0) {
-        //         i = (i + 1) % items.length;
-        //     } else {
-        //         i = (i + 1) % items.length + items.length;
-        //     }
-        //     counter--; 
-        // }
         int pos;
         if ((nextFirst + 1 + index) % items.length >= 0) {
             pos = (nextFirst + 1 + index) % items.length;
