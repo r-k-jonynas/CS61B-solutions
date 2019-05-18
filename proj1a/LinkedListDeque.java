@@ -31,7 +31,8 @@ public class LinkedListDeque<T> {
     /** Creating a deep copy means that you create an
      entirely new LinkedListDeque, with the exact same
      items as other. */
-    public LinkedListDeque(LinkedListDeque<T> other) {
+    @SuppressWarnings("unchecked")
+    public LinkedListDeque(LinkedListDeque other) {
         GenericNode temp = other.sentFront;
         GenericNode tempForCopy = new GenericNode(temp.prev, temp.item, null);
         sentFront = tempForCopy;
@@ -131,4 +132,24 @@ public class LinkedListDeque<T> {
         GenericNode temp = this.sentFront.next;
         return temp.traverseGenericNode(index);
     }
+
+//  public static void main(String[] args) {
+//      LinkedListDeque<String> test1 = new LinkedListDeque<>();
+//      test1.addFirst("One");
+//      // test1.size();
+//      // test1.removeLast();
+//      // test1.size();
+//      test1.addLast("Two");
+//      test1.printDeque();
+//      test1.removeLast();
+//      // System.out.println(test1.getRecursive(2));
+//      // System.out.println("---------------");
+//      test1.printDeque();
+//      // test1.size();
+//      // test1.removeFirst();
+//      // test1.size();
+//      LinkedListDeque<String> test2 = new LinkedListDeque<>(test1);
+//      test2.printDeque();
+//      test1.printDeque();
+//  }
 }

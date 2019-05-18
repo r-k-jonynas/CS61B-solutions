@@ -16,7 +16,7 @@ public class ArrayDeque<T> {
      entirely new ArrayDeque, with the exact same
      items as other. */
     @SuppressWarnings("unchecked")
-    public ArrayDeque(ArrayDeque<T> other) {
+    public ArrayDeque(ArrayDeque other) {
         items = (T []) new Object[other.items.length];
         System.arraycopy(other.items, 0, items, 0, other.items.length);
         nextFirst = other.nextFirst;
