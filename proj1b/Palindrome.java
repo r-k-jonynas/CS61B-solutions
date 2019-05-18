@@ -20,7 +20,6 @@ public class Palindrome {
      * @return boolean
      */
     public boolean isPalindrome(String word) {
-        word = word.toLowerCase();
         ArrayDeque<Character> deque = (ArrayDeque<Character>) this.wordToDeque(word);
         for (int i = 0; i < word.length() / 2; i++) {
             char temp1 = deque.removeFirst();
@@ -33,7 +32,6 @@ public class Palindrome {
     }
 
     public boolean isPalindrome(String word, CharacterComparator cc) {
-        word = word.toLowerCase();
         ArrayDeque<Character> deque = (ArrayDeque<Character>) this.wordToDeque(word);
         for (int i = 0; i < word.length() / 2; i++) {
             char temp1 = deque.removeFirst();
