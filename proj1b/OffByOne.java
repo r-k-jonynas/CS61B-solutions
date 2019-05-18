@@ -1,5 +1,5 @@
 public class OffByOne 
-    implements CharacterComparator{
+    implements CharacterComparator {
 
     /** Returns true if characters are off by one */
     @Override

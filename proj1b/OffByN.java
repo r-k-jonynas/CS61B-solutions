@@ -1,8 +1,8 @@
 public class OffByN 
-    implements CharacterComparator{
-    int allowedDiff;
+    implements CharacterComparator {
+    private int allowedDiff;
     
-    OffByN(int N) {
+    public OffByN(int N) {
         this.allowedDiff = N;
     }
     /** Returns true if characters are off by exactly N */

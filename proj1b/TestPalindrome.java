@@ -108,7 +108,7 @@ public class TestPalindrome {
     }
 
     @Test
-    public void testIsPalindromeOffByN7_2() {
+    public void testIsPalindromeOffByN72() {
         CharacterComparator offBy7 = new OffByN(7);
         assertTrue(palindrome.isPalindrome("a", offBy7));
     }

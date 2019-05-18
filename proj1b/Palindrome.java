@@ -7,7 +7,7 @@ public class Palindrome {
      */
     public Deque<Character> wordToDeque(String word) {
         ArrayDeque<Character> deque = new ArrayDeque<>();
-        for(int i = 0; i < word.length(); i++) {
+        for (int i = 0; i < word.length(); i++) {
             deque.addLast(word.charAt(i));
         }
         return deque;
@@ -20,8 +20,9 @@ public class Palindrome {
      * @return boolean
      */
     public boolean isPalindrome(String word) {
+        word = word.toLowerCase();
         ArrayDeque<Character> deque = (ArrayDeque<Character>) this.wordToDeque(word);
-        for(int i = 0; i < word.length() / 2; i++) {
+        for (int i = 0; i < word.length() / 2; i++) {
             char temp1 = deque.removeFirst();
             char temp2 = deque.removeLast();
             if (temp1 != temp2) {
@@ -32,9 +33,9 @@ public class Palindrome {
     }
 
     public boolean isPalindrome(String word, CharacterComparator cc) {
-        
+        word = word.toLowerCase();
         ArrayDeque<Character> deque = (ArrayDeque<Character>) this.wordToDeque(word);
-        for(int i = 0; i < word.length() / 2; i++) {
+        for (int i = 0; i < word.length() / 2; i++) {
             char temp1 = deque.removeFirst();
             char temp2 = deque.removeLast();
             if (!cc.equalChars(temp1, temp2)) {
