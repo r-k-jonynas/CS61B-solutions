@@ -10,24 +10,34 @@ public class Palindrome {
         for(int i = 0; i < word.length(); i++) {
             deque.addLast(word.charAt(i));
         }
-
         return deque;
     }
 
     /**
      * Checks if a word is a palindrome.
-     * REMEMBER: any word of length 1 or 0 is a palindrome.
+     * Any word of length 1 or 0 is a palindrome.
      * @param word
      * @return boolean
      */
     public boolean isPalindrome(String word) {
-        // TODO: fix
-        Palindrome palindromeTester = new Palindrome();
-        ArrayDeque<Character> deque = (ArrayDeque<Character>) palindromeTester.wordToDeque(word);
+        ArrayDeque<Character> deque = (ArrayDeque<Character>) this.wordToDeque(word);
         for(int i = 0; i < word.length() / 2; i++) {
             char temp1 = deque.removeFirst();
             char temp2 = deque.removeLast();
             if (temp1 != temp2) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isPalindrome(String word, CharacterComparator cc) {
+        
+        ArrayDeque<Character> deque = (ArrayDeque<Character>) this.wordToDeque(word);
+        for(int i = 0; i < word.length() / 2; i++) {
+            char temp1 = deque.removeFirst();
+            char temp2 = deque.removeLast();
+            if (!cc.equalChars(temp1, temp2)) {
                 return false;
             }
         }
