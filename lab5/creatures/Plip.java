@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * An implementation of a motile pacifist photosynthesizer.
@@ -57,8 +58,10 @@ public class Plip extends Creature {
      * that you get this exactly correct.
      */
     public Color color() {
-        g = 63;
-        return color(r, g, b);
+        g = 96* (int) Math.round(this.energy) + 63;
+        int red = 99;
+        int blue = 76;
+        return color(red, g, blue);
     }
 
     /**
@@ -74,7 +77,10 @@ public class Plip extends Creature {
      * private static final variable. This is not required for this lab.
      */
     public void move() {
-        // TODO
+        this.energy -= 0.15;
+        if (this.energy < 0) {
+            this.energy = 0;
+        }
     }
 
 
@@ -82,7 +88,10 @@ public class Plip extends Creature {
      * Plips gain 0.2 energy when staying due to photosynthesis.
      */
     public void stay() {
-        // TODO
+        this.energy += 0.2;
+        if (this.energy > 2) {
+            this.energy = 2;
+        }
     }
 
     /**
@@ -91,7 +100,9 @@ public class Plip extends Creature {
      * Plip.
      */
     public Plip replicate() {
-        return this;
+        Plip copy = new Plip(this.energy / 2);
+        this.energy /= 2;
+        return copy;
     }
 
     /**
@@ -111,20 +122,50 @@ public class Plip extends Creature {
         // Rule 1
         Deque<Direction> emptyNeighbors = new ArrayDeque<>();
         boolean anyClorus = false;
-        // TODO
         // (Google: Enhanced for-loop over keys of NEIGHBORS?)
-        // for () {...}
+        for (Direction i : neighbors.keySet()) {
+            String value = neighbors.get(i).name();
+            if (value.equals("empty")) {
+                emptyNeighbors.addLast(i);
+            } else if (value.equals("clorus")) {
+                anyClorus = true;
+            }
+        }
 
-        if (false) { // FIXME
-            // TODO
+        if (emptyNeighbors.isEmpty()) {
+            // System.out.println(Action.ActionType.STAY.toString());
+            return new Action(Action.ActionType.STAY);
         }
 
         // Rule 2
         // HINT: randomEntry(emptyNeighbors)
+        if(this.energy >= 1.0) {
+            int k = new Random().nextInt(emptyNeighbors.size());
+            for(int i = 0; i < k - 1; i++) {
+                emptyNeighbors.removeFirst();
+            }
+            Direction dir = emptyNeighbors.removeFirst();
+            // System.out.println(Action.ActionType.REPLICATE.toString() + " " + dir.toString());
+            return new Action(Action.ActionType.REPLICATE, dir);
 
+        }
         // Rule 3
+        // Move if see Clorus
+        if (anyClorus) {
+            int willMove = new Random().nextInt(1);
+            if (willMove == 1) {
+                int k = new Random().nextInt(emptyNeighbors.size());
+                for(int i = 0; i < k - 1; i++) {
+                    emptyNeighbors.removeFirst();
+                }
+                Direction dir = emptyNeighbors.removeFirst();
+                //System.out.println(Action.ActionType.MOVE.toString() + " " + dir.toString());
+                return new Action(Action.ActionType.MOVE, dir);
+            }
+        }
 
-        // Rule 4
+        // Rule 4 (if none of the first 3)
+        // System.out.println(Action.ActionType.STAY.toString());
         return new Action(Action.ActionType.STAY);
     }
 }

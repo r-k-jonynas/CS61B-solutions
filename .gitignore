@@ -50,4 +50,5 @@ $RECYCLE.BIN/
 *.msp
 *.lnk
 proj1a/ADC.java
-.vscode/*
+*.vscode/*
+*/.vscode/*

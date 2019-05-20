@@ -156,7 +156,7 @@ public class HugLife {
         }
         HugLife h = readWorld(args[0]);
         // HugLife h = new HugLife(WORLD_SIZE);
-        // h.initialize(args[0]); DON'T USE ME
+        // h.initialize(args[0]); //DON'T USE ME
 
         if (SIMULATE_BY_CYCLE) {
             h.simulate(MAX_CYCLES);
