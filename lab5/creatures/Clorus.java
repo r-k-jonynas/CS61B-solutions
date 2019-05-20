@@ -29,7 +29,7 @@ public class Clorus extends Creature {
     }
 
     @Override
-    public Creature replicate() {
+    public Clorus replicate() {
         Clorus copy = new Clorus(this.energy / 2);
         this.energy /= 2;
         return copy;
