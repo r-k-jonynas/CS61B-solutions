@@ -1,19 +1,15 @@
 package es.datastructur.synthesizer;
 import java.util.Iterator;
 
-//TODO: Make sure to that this class and all of its methods are public
-//TODO: Make sure to add the override tag for all overridden methods
-//TODO: Make sure to make this class implement BoundedQueue<T>
-
 public class ArrayRingBuffer<T> implements BoundedQueue<T>{
     /* Index for the next dequeue or peek. Least recently inserted element*/
-    public int first;
+    private int first;
     /* Index for the next enqueue. One beyond the most recently inserted item.*/
-    public int last;
+    private int last;
     /* Variable for the fillCount. */
-    public int fillCount;
+    private int fillCount;
     /* Array for storing the buffer data. */
-    public T[] rb;
+    private T[] rb;
 
     /**
      * Create a new ArrayRingBuffer with the given capacity.
@@ -86,12 +82,10 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>{
 
     @Override
     public java.util.Iterator<T> iterator() {
-        // TODO:
         return new ArrayRingBufferIterator(this.first);
     }
 
     private class ArrayRingBufferIterator implements Iterator<T> {
-        // TODO:
         private int wizPos;
         private int iterationsDone;
 //        private int wizEnd;
@@ -123,7 +117,6 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>{
    }
 
     public boolean equals(Object o) {
-        // TODO:
         if (o == null) { return false; }
         if (this == o) { return true; } // optimization
         if (this.getClass() != o.getClass()) { return false; }
@@ -139,18 +132,4 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>{
 
     }
 
-    public static void main(String[] args) {
-        ArrayRingBuffer<Integer> arb = new ArrayRingBuffer(10);
-        arb.enqueue(1);
-        arb.enqueue(2);
-        arb.enqueue(3);
-        arb.enqueue(4);
-        arb.enqueue(5);
-        arb.enqueue(6);
-        for (int x : arb) {
-            System.out.println(x);
-        }
-    }
-
 }
-    // TODO: Remove all comments that say TODO when you're done.
