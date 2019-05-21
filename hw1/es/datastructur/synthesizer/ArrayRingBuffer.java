@@ -5,22 +5,34 @@ import java.util.Iterator;
 //TODO: Make sure to add the override tag for all overridden methods
 //TODO: Make sure to make this class implement BoundedQueue<T>
 
-public class ArrayRingBuffer<T>  {
-    /* Index for the next dequeue or peek. */
-    private int first;
-    /* Index for the next enqueue. */
-    private int last;
+public class ArrayRingBuffer<T> implements BoundedQueue<T>{
+    /* Index for the next dequeue or peek. Least recently inserted element*/
+    public int first;
+    /* Index for the next enqueue. One beyond the most recently inserted item.*/
+    public int last;
     /* Variable for the fillCount. */
-    private int fillCount;
+    public int fillCount;
     /* Array for storing the buffer data. */
-    private T[] rb;
+    public T[] rb;
 
     /**
      * Create a new ArrayRingBuffer with the given capacity.
      */
     public ArrayRingBuffer(int capacity) {
-        // TODO: Create new array with capacity elements.
-        //       first, last, and fillCount should all be set to 0.
+        this.rb = (T[]) new Object[capacity];
+        this.first = 0;
+        this.last = 0;
+        this.fillCount = 0;
+    }
+
+    @Override
+    public int capacity() {
+        return this.rb.length;
+    }
+
+    @Override
+    public int fillCount() {
+        return this.fillCount;
     }
 
     /**
@@ -28,9 +40,17 @@ public class ArrayRingBuffer<T>  {
      * throw new RuntimeException("Ring buffer overflow").
      */
     public void enqueue(T x) {
-        // TODO: Enqueue the item. Don't forget to increase fillCount and update
-        //       last.
-        return;
+        if (this.isFull()) {
+            throw new RuntimeException("Ring buffer overflow");
+        } else {
+            rb[last] = x;
+            fillCount++;
+            if ((last + 1) % this.capacity() >= 0) {
+                last = (last + 1) % this.capacity();
+            } else {
+                last = (last + 1) % this.capacity() + this.capacity();
+            }
+        }
     }
 
     /**
@@ -38,9 +58,18 @@ public class ArrayRingBuffer<T>  {
      * throw new RuntimeException("Ring buffer underflow").
      */
     public T dequeue() {
-        // TODO: Dequeue the first item. Don't forget to decrease fillCount and
-        //       update first.
-        return null;
+        if (this.isEmpty()) {
+            throw new RuntimeException("Ring buffer underflow");
+        }
+        T temp = rb[first];
+        rb[first] = null;
+        fillCount--;
+        if ((first + 1) % this.capacity() >= 0) {
+            first = (first + 1) % this.capacity();
+        } else {
+            first = (first + 1) % this.capacity() + this.capacity();
+        }
+        return temp;
     }
 
     /**
@@ -48,9 +77,61 @@ public class ArrayRingBuffer<T>  {
      * throw new RuntimeException("Ring buffer underflow").
      */
     public T peek() {
-        // TODO: Return the first item. None of your instance variables should
-        //       change.
-        return null;
+        if (this.isEmpty()) {
+            throw new RuntimeException("Ring buffer underflow");
+        }
+        T temp = rb[first];
+        return temp;
+    }
+
+    @Override
+    public ArrayRingBufferIterator<T> iterator() {
+        // TODO:
+        return new ArrayRingBufferIterator(this.first);
+    }
+
+    private class ArrayRingBufferIterator<T> implements Iterator<T> {
+        // TODO:
+        private int wizPos;
+//        private int wizEnd;
+//        private int wizArrayCap;
+
+        public ArrayRingBufferIterator(int start) {
+           this.wizPos = start;
+        }
+
+       @Override
+       public boolean hasNext() {
+           return wizPos < fillCount;
+       }
+
+       @Override
+       public T next() {
+            T returnItem = (T) rb[wizPos];
+           if ((wizPos + 1) % rb.length >= 0) {
+               wizPos = (wizPos + 1) % rb.length;
+           } else {
+               wizPos = (wizPos + 1) %  rb.length +  rb.length;
+           }
+           return null;
+       }
+   }
+
+    public boolean equals(Object o) {
+        // TODO:
+        if (o == null) { return false; }
+        if (this == o) { return true; } // optimization
+        if (this.getClass() != o.getClass()) { return false; }
+        ArrayRingBuffer<T> other = (ArrayRingBuffer<T>) o;
+        ArrayRingBufferIterator oWizard = other.iterator();
+        if (this.fillCount() != other.fillCount()
+            || this.capacity() != other.capacity()) { return false; }
+            for (T item : this) {
+                if (!item.equals(oWizard.next()))
+                    return false;
+            }
+        return true;
+
     }
 
     // TODO: When you get to part 4, implement the needed code to support
