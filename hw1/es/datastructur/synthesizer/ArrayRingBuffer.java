@@ -85,24 +85,28 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>{
     }
 
     @Override
-    public ArrayRingBufferIterator<T> iterator() {
+    public java.util.Iterator<T> iterator() {
         // TODO:
         return new ArrayRingBufferIterator(this.first);
     }
 
-    private class ArrayRingBufferIterator<T> implements Iterator<T> {
+    private class ArrayRingBufferIterator implements Iterator<T> {
         // TODO:
         private int wizPos;
+        private int iterationsDone;
 //        private int wizEnd;
 //        private int wizArrayCap;
 
         public ArrayRingBufferIterator(int start) {
            this.wizPos = start;
+           this.iterationsDone = 0;
         }
 
        @Override
        public boolean hasNext() {
-           return wizPos < fillCount;
+            // fillCount != 0
+
+           return iterationsDone < capacity() && rb[wizPos] != null;
        }
 
        @Override
@@ -113,7 +117,8 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>{
            } else {
                wizPos = (wizPos + 1) %  rb.length +  rb.length;
            }
-           return null;
+           iterationsDone++;
+           return returnItem;
        }
    }
 
@@ -123,7 +128,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>{
         if (this == o) { return true; } // optimization
         if (this.getClass() != o.getClass()) { return false; }
         ArrayRingBuffer<T> other = (ArrayRingBuffer<T>) o;
-        ArrayRingBufferIterator oWizard = other.iterator();
+        java.util.Iterator oWizard = other.iterator();
         if (this.fillCount() != other.fillCount()
             || this.capacity() != other.capacity()) { return false; }
             for (T item : this) {
@@ -134,7 +139,18 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>{
 
     }
 
-    // TODO: When you get to part 4, implement the needed code to support
-    //       iteration and equals.
+    public static void main(String[] args) {
+        ArrayRingBuffer<Integer> arb = new ArrayRingBuffer(10);
+        arb.enqueue(1);
+        arb.enqueue(2);
+        arb.enqueue(3);
+        arb.enqueue(4);
+        arb.enqueue(5);
+        arb.enqueue(6);
+        for (int x : arb) {
+            System.out.println(x);
+        }
+    }
+
 }
     // TODO: Remove all comments that say TODO when you're done.
