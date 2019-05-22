@@ -42,6 +42,8 @@ public class UnionFind {
     /* Returns true if nodes v1 and v2 are connected. */
     public boolean connected(int v1, int v2) {
         // TODO
+        this.validate(v1);
+        this.validate(v2);
         return find(v1) == find(v2);
     }
 
@@ -58,14 +60,16 @@ public class UnionFind {
         } else {
             int root1 = find(v1);
             int root2 = find(v2);
-            if (this.parent(root1) < this.parent(root2)) {
-                parent[root1]--;
+            int size1 = Math.abs(this.parent(root1));
+            int size2 = Math.abs(this.parent(root2));
+            if (size1 > size2) {
+                parent[root1] -= size2;
                 parent[root2] = root1;
-            } else if (this.parent(root1) > this.parent(root2)) {
-                parent[root2]--;
+            } else if (size2 < size1) {
+                parent[root2] -= size1;
                 parent[root1] = root2;
             } else {
-                parent[root2]--;
+                parent[root2] -= size1;
                 parent[root1] = root2;
             }
         }

@@ -44,8 +44,8 @@ public class TestUnionFind {
         assertEquals(3, u1.sizeOf(2));
 
         u1.union(2, 4);
-        assertEquals(4, u1.sizeOf(4));
-        assertEquals(4, u1.sizeOf(2));
+        assertEquals(5, u1.sizeOf(4));
+        assertEquals(5, u1.sizeOf(2));
     }
 
     @Test
@@ -122,6 +122,13 @@ public class TestUnionFind {
         assertEquals(2, u1.find(3));
         assertEquals(2, u1.find(4));
         assertEquals(2, u1.find(2));
+    }
 
+    @Test
+    public void testWorstCase() {
+        UnionFind u1 = new UnionFind(8);
+        u1.union(1, 0);
+        u1.union(3, 2);
+        u1.union(3, 1);
     }
 }
