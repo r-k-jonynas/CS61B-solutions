@@ -16,7 +16,7 @@ public class UnionFind {
     /* Throws an exception if v1 is not a valid index. */
     private void validate(int vertex) {
         if (vertex >= parent.length || vertex < 0) {
-            throw new IndexOutOfBoundsException("No such vertex exists");
+            throw new IllegalArgumentException();
         }
     }
 

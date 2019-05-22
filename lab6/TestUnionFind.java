@@ -11,12 +11,12 @@ public class TestUnionFind {
         assertEquals(-1, u1.parent[4]);
     }
 
-//    @Test(expected = IndexOutOfBoundsException.class)
+//    @Test(expected = IllegalArgumentException.class)
 //    public void testValidate1() {
 //        UnionFind u1 = new UnionFind(5);
 //        u1.validate(-1);
 //    }
-//    @Test(expected = IndexOutOfBoundsException.class)
+//    @Test(expected = IllegalArgumentException.class)
 //    public void testValidate2() {
 //        UnionFind u1 = new UnionFind(5);
 //        u1.validate(5);
