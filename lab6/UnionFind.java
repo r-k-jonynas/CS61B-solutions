@@ -25,7 +25,7 @@ public class UnionFind {
         // TODO
         this.validate(v1);
         int root = this.find(v1);
-        return Math.abs(parent[root]) - 1;
+        return Math.abs(parent[root]);
     }
 
     /* Returns the parent of v1. If v1 is the root of a tree, returns the
