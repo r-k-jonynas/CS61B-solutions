@@ -43,7 +43,7 @@ public class Percolation {
     }
 
     private boolean isValidIndex(int row, int col) {
-        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[1].length - 1)) {
+        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[0].length - 1)) {
             return false;
         }
         return true;
@@ -86,7 +86,7 @@ public class Percolation {
     /* should take constant time plus a constant number of calls to the union-find
     methods union(), find(), connected(), and count(). */
     public void open(int row, int col) {
-        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[1].length - 1)) {
+        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[0].length - 1)) {
             throw new java.lang.IndexOutOfBoundsException();
         }
         if (!isOpen(row, col)) {
@@ -111,7 +111,7 @@ public class Percolation {
     /* should take constant time plus a constant number of calls to the union-find
     methods union(), find(), connected(), and count(). */
     public boolean isOpen(int row, int col) {
-        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[1].length - 1)) {
+        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[0].length - 1)) {
             throw new java.lang.IndexOutOfBoundsException();
         }
         return sites[row][col] > 0;
@@ -121,7 +121,7 @@ public class Percolation {
     /* should take constant time plus a constant number of calls to the union-find
     methods union(), find(), connected(), and count(). */
     public boolean isFull(int row, int col) {
-        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[1].length - 1)) {
+        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[0].length - 1)) {
             throw new java.lang.IndexOutOfBoundsException();
         }
         int currentRowColTo1D = this.translateXYto1D(row, col);
@@ -150,16 +150,16 @@ public class Percolation {
         private final int row;
         private final int col;
 
-        public RowColPair(int first, int second) {
+        private RowColPair(int first, int second) {
                 this.row = first;
                 this.col = second;
         }
 
-        public int getRow() {
+        private int getRow() {
             return row;
         }
 
-        public int getCol() {
+        private int getCol() {
             return col;
         }
     }

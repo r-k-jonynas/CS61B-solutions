@@ -7,7 +7,27 @@ import static org.junit.Assert.*;
 
 public class TestPercolation {
     @Test
-    public void testOpen() {
+    public void testPercolationWithNEquals1() {
+        Percolation test = new Percolation(1);
+        assertFalse(test.isOpen(0, 0));
+        assertFalse(test.isFull(0, 0));
+        assertTrue(test.percolates());
+        test.open(0, 0);
+        assertTrue(test.isOpen(0, 0));
+        assertTrue(test.isFull(0, 0));
+        assertTrue(test.percolates());
+    }
+
+    @Test
+    public void testPercolationWithNEquals2() {
+        Percolation test = new Percolation(2);
+        assertFalse(test.isOpen(0, 0));
+        assertFalse(test.isFull(0, 0));
+        assertTrue(test.percolates());
+        test.open(0, 0);
+        assertTrue(test.isOpen(0, 0));
+        assertTrue(test.isFull(0, 0));
+        assertTrue(test.percolates());
     }
 
 //    @Test

@@ -4,17 +4,17 @@ package hw2;
 import edu.princeton.cs.introcs.StdRandom;
 import edu.princeton.cs.introcs.StdStats;
 
-import java.util.stream.IntStream;
 
 public class PercolationStats {
     // perform T independent experiments on an N-by-N grid
-    PercolationFactory factory;
-    int[] means;
+    // TODO: make sure following variables are private;
+    private PercolationFactory factory;
+    private int[] means;
 
     public PercolationStats(int N, int T, PercolationFactory pf) {
         if (N <= 0 || T <= 0) { throw new java.lang.IllegalArgumentException(); }
         else
-            factory = new PercolationFactory();
+            factory = pf;
             means = new int[T];
 
             for(int i = 0; i < T; i++) {
