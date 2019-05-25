@@ -115,8 +115,8 @@ public class Percolation {
             throw new java.lang.IndexOutOfBoundsException();
         }
         return sites[row][col] > 0;
-
     }
+
     // is the site (row, col) full?
     /* should take constant time plus a constant number of calls to the union-find
     methods union(), find(), connected(), and count(). */
@@ -126,6 +126,8 @@ public class Percolation {
         }
         int currentRowColTo1D = this.translateXYto1D(row, col);
         int virtualTop = sites[0].length * sites[0].length;
+
+        // TODO: the following condition is not enough to preven backwash
         return connections.connected(currentRowColTo1D, virtualTop) && isOpen(row, col);
     }
     // number of open sites
@@ -138,6 +140,7 @@ public class Percolation {
     methods union(), find(), connected(), and count(). */
     public boolean percolates() {
         // TODO: make sure there is no backwash after percolation.
+        if(this.numberOfOpenSites() < this.sites[0].length) {return false; }
         int virtualTop = sites[0].length * sites[0].length;
         int virtualBottom = virtualTop + 1;
         return connections.connected(virtualBottom, virtualTop);

@@ -4,13 +4,13 @@ package hw2;
 import edu.princeton.cs.introcs.StdRandom;
 import edu.princeton.cs.introcs.StdStats;
 
-
 public class PercolationStats {
     // perform T independent experiments on an N-by-N grid
     // TODO: make sure following variables are private;
     private PercolationFactory factory;
     private int[] means;
 
+    // TODO: fix array index out of bounds
     public PercolationStats(int N, int T, PercolationFactory pf) {
         if (N <= 0 || T <= 0) { throw new java.lang.IllegalArgumentException(); }
         else
@@ -20,8 +20,8 @@ public class PercolationStats {
             for(int i = 0; i < T; i++) {
                 Percolation temp = factory.make(N);
                 while(!temp.percolates()) {
-                    int r1 = StdRandom.uniform(N * N);
-                    int r2 = StdRandom.uniform(N * N);
+                    int r1 = StdRandom.uniform(N);
+                    int r2 = StdRandom.uniform(N);
                     temp.open(r1, r2);
                 }
                 means[i] = temp.numberOfOpenSites();
@@ -56,4 +56,13 @@ public class PercolationStats {
         double sqrootOfT = Math.sqrt(this.means.length);
         return mu + (1.96 * std / sqrootOfT);
     }
+
+    public static void main(String[] args) {
+        PercolationStats stats = new PercolationStats(5, 2, new PercolationFactory());
+        System.out.println(stats.mean());
+        System.out.println(stats.stddev());
+        System.out.println(stats.confidenceLow());
+        System.out.println(stats.confidenceHigh());
+    }
+
 }
