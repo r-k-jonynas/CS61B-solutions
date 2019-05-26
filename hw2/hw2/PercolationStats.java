@@ -6,26 +6,26 @@ import edu.princeton.cs.introcs.StdStats;
 
 public class PercolationStats {
     // perform T independent experiments on an N-by-N grid
-    // TODO: make sure following variables are private;
     private PercolationFactory factory;
     private double[] thresholds;
 
-    // TODO: fix array index out of bounds
     public PercolationStats(int N, int T, PercolationFactory pf) {
-        if (N <= 0 || T <= 0) { throw new java.lang.IllegalArgumentException(); }
-        else
+        if (N <= 0 || T <= 0) {
+            throw new java.lang.IllegalArgumentException();
+        } else {
             factory = pf;
             thresholds = new double[T];
 
-            for(int i = 0; i < T; i++) {
+            for (int i = 0; i < T; i++) {
                 Percolation temp = factory.make(N);
-                while(!temp.percolates()) {
+                while (!temp.percolates()) {
                     int r1 = StdRandom.uniform(N);
                     int r2 = StdRandom.uniform(N);
                     temp.open(r1, r2);
                 }
                 thresholds[i] = (double) temp.numberOfOpenSites() / (double) (N * N);
             }
+        }
     }
     // sample mean of percolation threshold
     public double mean() {
@@ -35,7 +35,7 @@ public class PercolationStats {
     public double stddev() {
         double mean = this.mean();
         double totalStdSum = 0;
-        for(int i = 0; i < thresholds.length; i++) {
+        for (int i = 0; i < thresholds.length; i++) {
             double tempDif = (thresholds[i] - mean);
             totalStdSum += tempDif * tempDif;
         }
@@ -58,18 +58,6 @@ public class PercolationStats {
     }
 
     public static void main(String[] args) {
-        PercolationStats stats = new PercolationStats(50, 10, new PercolationFactory());
-        PercolationStats stats2 = new PercolationStats(50, 5, new PercolationFactory());
-
-        System.out.println(stats.mean());
-        System.out.println(stats.stddev());
-        System.out.println(stats.confidenceLow());
-        System.out.println(stats.confidenceHigh());
-        System.out.println("-------------");
-        System.out.println(stats2.mean());
-        System.out.println(stats2.stddev());
-        System.out.println(stats2.confidenceLow());
-        System.out.println(stats2.confidenceHigh());
     }
 
 }

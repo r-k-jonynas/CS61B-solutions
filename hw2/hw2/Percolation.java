@@ -1,37 +1,45 @@
 package hw2;
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Percolation {
-    // TODO: make private after done
     /* First dimension is rows, second is columns */
-    private int[][] sites;
+    private boolean[][] sites;
     private int numOfOpenSites;
     private WeightedQuickUnionUF connections;
+    private WeightedQuickUnionUF connectedDirectlyToTop;
+    private final int VIRTUAL_TOP;
+    private final int VIRTUAL_BOTTOM;
 
     // create N-by-N grid, with all sites initially blocked
     // The constructor should take time proportional to N^2
     public Percolation(int N) {
-        if (N <= 0) { throw new java.lang.IllegalArgumentException(); }
+        if (N <= 0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         else {
             /* all sites are initialized as  */
-            sites = new int[N][N];
+            sites = new boolean[N][N];
             numOfOpenSites = 0;
             /* last two are for virtual sites
             * N*N is the virtual top
             * N*N +1 is the virtual bottom*/
             connections = new WeightedQuickUnionUF(N * N + 2);
+            VIRTUAL_TOP = N * N;
+            VIRTUAL_BOTTOM = N * N + 1;
+            connectedDirectlyToTop = new WeightedQuickUnionUF( N * N + 1);
+
             /* Connect all the top-level sites to the virtual top */
-            for(int i = 0; i < N; i++){
-                connections.union(i, N * N);
+            for (int i = 0; i < N; i++){
+                connections.union(i, VIRTUAL_TOP);
+                connectedDirectlyToTop.union(i, VIRTUAL_TOP);
             }
             /* Connect all the bottom-level sites to the virtual bottom */
-            for(int i = (N - 1) * N; i < N * N; i++){
-                connections.union(i, N * N + 1);
+            for (int i = (N - 1) * N; i < N * N; i++){
+                connections.union(i, VIRTUAL_BOTTOM);
             }
         }
 
@@ -42,11 +50,10 @@ public class Percolation {
         return (row * sites.length) + col;
     }
 
-    private boolean isValidIndex(int row, int col) {
-        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[0].length - 1)) {
-            return false;
+    private void isValidIndex(int row, int col) {
+        if ((row < 0 || row > sites[0].length - 1) || (col < 0 || col > sites[0].length - 1)) {
+            throw new java.lang.IndexOutOfBoundsException();
         }
-        return true;
     }
 
     private List<Integer> checkAdjacentOpen(int row, int col) {
@@ -58,20 +65,21 @@ public class Percolation {
         allAdjacents[2] = new RowColPair(row, col + 1);
         allAdjacents[3] = new RowColPair(row + 1, col);
 
-        for (RowColPair p:
-             allAdjacents) {
+        for (RowColPair p : allAdjacents) {
 
             int r = p.getRow();
             int c = p.getCol();
 
-            if(this.isValidIndex(r, c)) {
-                if (sites[r][c] > 0) {
+            try {
+                isValidIndex(row, col);
+                if (sites[r][c]) {
                     openAdjacents.add(this.translateXYto1D(r, c));
                 }
+            } catch (IndexOutOfBoundsException e) {
             }
         }
 
-        return openAdjacents;
+            return openAdjacents;
     }
 
 
@@ -86,22 +94,24 @@ public class Percolation {
     /* should take constant time plus a constant number of calls to the union-find
     methods union(), find(), connected(), and count(). */
     public void open(int row, int col) {
-        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[0].length - 1)) {
-            throw new java.lang.IndexOutOfBoundsException();
-        }
+        isValidIndex(row, col);
+
         if (!isOpen(row, col)) {
             // Set to 1 to denote open
-            sites[row][col] = 1;
+            sites[row][col] = true;
             // Get the Weighted Quick Union index for row, col
             int wquEntryForRowCol = this.translateXYto1D(row, col);
             // Increase Number of Open Sites counter
             numOfOpenSites++;
             // Connect to all open adjacents
-            List<Integer> openNeighbours= this.checkAdjacentOpen(row, col);
-            for (int i:
-                 openNeighbours) {
-                if(!connections.connected(wquEntryForRowCol, i)) {
+            List<Integer> openNeighbours = this.checkAdjacentOpen(row, col);
+            for (int i: openNeighbours) {
+                if (!connections.connected(wquEntryForRowCol, i)) {
                     connections.union(wquEntryForRowCol, i);
+                }
+
+                if(!connectedDirectlyToTop.connected(wquEntryForRowCol, i)) {
+                    connectedDirectlyToTop.union(wquEntryForRowCol, i);
                 }
             }
         }
@@ -111,27 +121,23 @@ public class Percolation {
     /* should take constant time plus a constant number of calls to the union-find
     methods union(), find(), connected(), and count(). */
     public boolean isOpen(int row, int col) {
-        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[0].length - 1)) {
-            throw new java.lang.IndexOutOfBoundsException();
-        }
-        return sites[row][col] > 0;
+        isValidIndex(row, col);
+        return sites[row][col];
     }
 
     // is the site (row, col) full?
     /* should take constant time plus a constant number of calls to the union-find
     methods union(), find(), connected(), and count(). */
     public boolean isFull(int row, int col) {
-        if ((row < 0 || row > sites[0].length - 1) ||(col < 0 || col > sites[0].length - 1)) {
-            throw new java.lang.IndexOutOfBoundsException();
-        }
+        isValidIndex(row, col);
         int currentRowColTo1D = this.translateXYto1D(row, col);
-        int virtualTop = sites[0].length * sites[0].length;
 
-        // TODO: the following condition is not enough to preven backwash
-        return connections.connected(currentRowColTo1D, virtualTop) && isOpen(row, col);
+        boolean condition = isOpen(row, col) && connectedDirectlyToTop.connected(currentRowColTo1D, VIRTUAL_TOP);
+
+        return condition;
     }
+
     // number of open sites
-    /* should take constant time*/
     public int numberOfOpenSites() {
         return numOfOpenSites;
     }
@@ -139,11 +145,10 @@ public class Percolation {
     /* should take constant time plus a constant number of calls to the union-find
     methods union(), find(), connected(), and count(). */
     public boolean percolates() {
-        // TODO: make sure there is no backwash after percolation.
-        if(this.numberOfOpenSites() < this.sites[0].length) {return false; }
-        int virtualTop = sites[0].length * sites[0].length;
-        int virtualBottom = virtualTop + 1;
-        return connections.connected(virtualBottom, virtualTop);
+        if(this.numberOfOpenSites() < this.sites[0].length) {
+            return false;
+        }
+        return connections.connected(VIRTUAL_TOP, VIRTUAL_BOTTOM);
     }
 
     /**
@@ -154,8 +159,8 @@ public class Percolation {
         private final int col;
 
         private RowColPair(int first, int second) {
-                this.row = first;
-                this.col = second;
+            this.row = first;
+            this.col = second;
         }
 
         private int getRow() {
