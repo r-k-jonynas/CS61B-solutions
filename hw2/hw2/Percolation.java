@@ -15,12 +15,10 @@ public class Percolation {
     private final int VIRTUAL_BOTTOM;
 
     // create N-by-N grid, with all sites initially blocked
-    // The constructor should take time proportional to N^2
     public Percolation(int N) {
         if (N <= 0) {
             throw new java.lang.IllegalArgumentException();
-        }
-        else {
+        } else {
             /* all sites are initialized as  */
             sites = new boolean[N][N];
             numOfOpenSites = 0;
@@ -30,15 +28,15 @@ public class Percolation {
             connections = new WeightedQuickUnionUF(N * N + 2);
             VIRTUAL_TOP = N * N;
             VIRTUAL_BOTTOM = N * N + 1;
-            connectedDirectlyToTop = new WeightedQuickUnionUF( N * N + 1);
+            connectedDirectlyToTop = new WeightedQuickUnionUF(N * N + 1);
 
             /* Connect all the top-level sites to the virtual top */
-            for (int i = 0; i < N; i++){
+            for (int i = 0; i < N; i++) {
                 connections.union(i, VIRTUAL_TOP);
                 connectedDirectlyToTop.union(i, VIRTUAL_TOP);
             }
             /* Connect all the bottom-level sites to the virtual bottom */
-            for (int i = (N - 1) * N; i < N * N; i++){
+            for (int i = (N - 1) * N; i < N * N; i++) {
                 connections.union(i, VIRTUAL_BOTTOM);
             }
         }
@@ -76,6 +74,7 @@ public class Percolation {
                     openAdjacents.add(this.translateXYto1D(r, c));
                 }
             } catch (IndexOutOfBoundsException e) {
+                continue;
             }
         }
 
@@ -83,16 +82,6 @@ public class Percolation {
     }
 
 
-    /** Open the site (row, col) if it is not open already
-     * 1) check if valid index;
-     * 2) check if open alrd;
-     * 3) set to open;
-     * 4) call union to all adjecent open sites
-     * @param row site's row number
-     * @param col site's column number
-     */
-    /* should take constant time plus a constant number of calls to the union-find
-    methods union(), find(), connected(), and count(). */
     public void open(int row, int col) {
         isValidIndex(row, col);
 
@@ -110,42 +99,37 @@ public class Percolation {
                     connections.union(wquEntryForRowCol, i);
                 }
 
-                if(!connectedDirectlyToTop.connected(wquEntryForRowCol, i)) {
+                if (!connectedDirectlyToTop.connected(wquEntryForRowCol, i)) {
                     connectedDirectlyToTop.union(wquEntryForRowCol, i);
                 }
             }
         }
     }
 
-    // is the site (row, col) open?
-    /* should take constant time plus a constant number of calls to the union-find
-    methods union(), find(), connected(), and count(). */
+
     public boolean isOpen(int row, int col) {
         isValidIndex(row, col);
         return sites[row][col];
     }
 
-    // is the site (row, col) full?
-    /* should take constant time plus a constant number of calls to the union-find
-    methods union(), find(), connected(), and count(). */
+
     public boolean isFull(int row, int col) {
         isValidIndex(row, col);
         int currentRowColTo1D = this.translateXYto1D(row, col);
 
-        boolean condition = isOpen(row, col) && connectedDirectlyToTop.connected(currentRowColTo1D, VIRTUAL_TOP);
+        boolean condition = isOpen(row, col) &&
+                connectedDirectlyToTop.connected(currentRowColTo1D, VIRTUAL_TOP);
 
         return condition;
     }
 
-    // number of open sites
+
     public int numberOfOpenSites() {
         return numOfOpenSites;
     }
-    // does the system percolate?
-    /* should take constant time plus a constant number of calls to the union-find
-    methods union(), find(), connected(), and count(). */
+
     public boolean percolates() {
-        if(this.numberOfOpenSites() < this.sites[0].length) {
+        if (this.numberOfOpenSites() < this.sites[0].length) {
             return false;
         }
         return connections.connected(VIRTUAL_TOP, VIRTUAL_BOTTOM);

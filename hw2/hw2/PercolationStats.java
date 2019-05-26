@@ -57,7 +57,4 @@ public class PercolationStats {
         return mu + (1.96 * std / sqrootOfT);
     }
 
-    public static void main(String[] args) {
-    }
-
 }
