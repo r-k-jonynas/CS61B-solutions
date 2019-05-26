@@ -78,7 +78,7 @@ public class Percolation {
             }
         }
 
-            return openAdjacents;
+        return openAdjacents;
     }
 
 
@@ -117,8 +117,8 @@ public class Percolation {
         isValidIndex(row, col);
         int currentRowColTo1D = this.translateXYto1D(row, col);
 
-        boolean condition = isOpen(row, col) &&
-                connectedDirectlyToTop.connected(currentRowColTo1D, VIRTUAL_TOP);
+        boolean condition = isOpen(row, col)
+                && connectedDirectlyToTop.connected(currentRowColTo1D, VIRTUAL_TOP);
 
         return condition;
     }
