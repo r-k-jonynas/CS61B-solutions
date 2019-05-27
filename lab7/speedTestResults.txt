@@ -1,0 +1,38 @@
+### InsertRandomSpeedTest ###
+
+Please enter desired length of each string: 100
+
+Enter # strings to insert into the maps: 100
+class ULLMap: 0.01 sec
+class BSTMap: 0.00 sec
+Java's Built-in TreeMap: 0.00 sec
+
+Enter # strings to insert into the maps: 1000
+class ULLMap: 0.01 sec
+class BSTMap: 0.00 sec
+Java's Built-in TreeMap: 0.01 sec
+
+Enter # strings to insert into the maps: 10000
+class ULLMap: 0.55 sec
+class BSTMap: 0.03 sec
+Java's Built-in TreeMap: 0.02 sec
+
+### InsertInOrderSpeedTest ###
+
+Enter # strings to insert into the maps: 100
+class ULLMap: 0.00 sec
+class BSTMap: 0.00 sec
+Java's Built-in TreeMap: 0.00 sec
+Java's Built-in HashMap: 0.00 sec
+
+Enter # strings to insert into the maps: 1000
+class ULLMap: 0.05 sec
+class BSTMap: 0.02 sec
+Java's Built-in TreeMap: 0.00 sec
+Java's Built-in HashMap: 0.00 sec
+
+Enter # strings to insert into the maps: 10000
+class ULLMap: 0.65 sec
+class BSTMap: 1.12 sec
+Java's Built-in TreeMap: 0.02 sec
+Java's Built-in HashMap: 0.01 sec
